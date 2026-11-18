@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlipStream Exclusives</title>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    padding: 35px 20px 25px;
+    border-bottom: 1px solid #222;
+}
+
+.logo {
+    width: 115px;
+    height: 115px;
+    object-fit: contain;
+    margin-bottom: 18px;
+}
+
+header h1 {
+    font-size: 25px;
+    letter-spacing: 4px;
+    font-weight: 800;
+}
+
+header p {
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin-top: 10px;
+}
+
+main {
+    max-width: 850px;
+    margin: auto;
+    padding: 45px 20px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.section-title h2 {
+    font-size: 21px;
+    letter-spacing: 2px;
+}
+
+.section-title p {
+    color: #888;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.track-card {
+    border: 1px solid #292929;
+    background: #090909;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    border-radius: 8px;
+}
+
+.cover {
+    width: 150px;
+    height: 150px;
+    background: #151515;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    flex-shrink: 0;
+    font-size: 13px;
+    text-align: center;
+}
+
+.track-info {
+    flex: 1;
+}
+
+.track-info .label {
+    color: #999;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.track-info h3 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.artist {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 22px;
+}
+
+.buy-btn {
+    display: block;
+    width: 100%;
+    margin-top: 22px;
+    padding: 15px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.buy-btn:hover {
+    background: #ccc;
+}
+
+.locked {
+    margin-top: 15px;
+    padding: 14px;
+    border: 1px solid #333;
+    color: #888;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+.lock-icon {
+    margin-right: 7px;
+}
+
+.status {
+    display: none;
+    margin-top: 15px;
+    padding: 12px;
+    background: #151515;
+    border: 1px solid #333;
+    color: #ccc;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 15px;
+    border-top: 1px solid #222;
+    color: #666;
+    font-size: 12px;
+    line-height: 2;
+}
+
+@media(max-width: 600px) {
+    header h1 {
+        font-size: 19px;
+    }
+
+    .track-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cover {
+        width: 190px;
+        height: 190px;
+    }
+
+    .track-info {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img
+        src="IMG-20261114-WA0011.jpg"
+        class="logo"
+        alt="FlipStream Logo"
+    >
+
+    <h1>FLIPSTREAM EXCLUSIVES</h1>
+    <p>ONE VISION. ONE PLATFORM. ONE COMMUNITY.</p>
+</header>
+
+<main>
+
+    <div class="section-title">
+        <h2>EXCLUSIVE RELEASES</h2>
+        <p>Discover music. Support independent artists.</p>
+    </div>
+
+    <div class="track-card">
+
+        <div class="cover">
+            EXCLUSIVE<br>MUSIC
+        </div>
+
+        <div class="track-info">
+
+            <div class="label">EXCLUSIVE RELEASE</div>
+
+            <h3>Man Down</h3>
+
+            <div class="artist">Purp Mali</div>
+
+            <div class="price">R50.00</div>
+
+            <button class="buy-btn" onclick="buyTrack()">
+                BUY NOW — R50
+            </button>
+
+            <div class="locked" id="lockedMessage">
+                <span class="lock-icon">🔒</span>
+                DOWNLOAD LOCKED — PAYMENT REQUIRED
+            </div>
+
+            <div class="status" id="paymentStatus"></div>
+
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    FLIPSTREAM EXCLUSIVES<br>
+    © 2026 FlipStream. All Rights Reserved.<br>
+    One Vision. One Platform. One Community.
+</footer>
+
+<script>
+
+const PAYSTACK_PUBLIC_KEY =
+"pk_test_a1531e3481d8d69dae246b2a89664c2cd7c082ec";
+
+// Backend verification endpoint will be added
+// when we deploy our Firebase Cloud Function.
+const VERIFY_ENDPOINT = "";
+
+function buyTrack() {
+
+    const handler = PaystackPop.setup({
+
+        key: PAYSTACK_PUBLIC_KEY,
+
+        email: prompt("Enter your email address for your purchase receipt:"),
+
+        amount: 5000,
+
+        currency: "ZAR",
+
+        ref: "FLIPSTREAM_" + Date.now(),
+
+        callback: function(response) {
+
+            const status = document.getElementById("paymentStatus");
+
+            status.style.display = "block";
+
+            status.innerHTML =
+                "Payment submitted successfully.<br>" +
+                "Reference: " + response.reference +
+                "<br>Waiting for secure payment verification.";
+
+            if (!VERIFY_ENDPOINT) {
+                status.innerHTML +=
+                    "<br><br>Download remains locked until backend verification is connected.";
+                return;
+            }
+
+            fetch(VERIFY_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    reference: response.reference,
+                    product: "purp-mali-man-down"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.verified === true) {
+                    status.innerHTML =
+                        "Payment verified successfully. Your download is ready.";
+                } else {
+                    status.innerHTML =
+                        "Payment verification pending. Download remains locked.";
+                }
+
+            })
+            .catch(() => {
+                status.innerHTML =
+                    "We could not verify your payment yet. Please contact support.";
+            });
+
+        },
+
+        onClose: function() {
+            console.log("Paystack checkout closed.");
+        }
+
+    });
+
+    handler.openIframe();
+}
+
+</script>
+
+</body>
+</html>
